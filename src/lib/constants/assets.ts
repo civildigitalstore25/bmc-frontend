@@ -3,6 +3,8 @@ export const ASSETS = {
     LOGO: "/images/logo.png",
     FAVICON: "/images/logo.png",
     HERO_POSTER: "/images/hero-poster.jpg",
+    INSTAGRAM: "/images/social/instagram.svg",
+    FACEBOOK: "/images/social/facebook.svg",
   },
   VIDEOS: {
     HERO: "/videos/hero.mp4",

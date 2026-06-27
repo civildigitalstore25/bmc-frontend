@@ -38,7 +38,6 @@ export function ComingSoonHero({ siteName }: ComingSoonHeroProps) {
       </div>
 
       <SocialLinks
-        
         className="absolute inset-x-0 bottom-[max(1.5rem,env(safe-area-inset-bottom))] z-20 flex md:hidden"
       />
     </main>
