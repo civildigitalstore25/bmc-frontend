@@ -15,7 +15,7 @@ interface BackgroundVideoProps {
 export function BackgroundVideo({ className }: BackgroundVideoProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
-  const [isMuted, setIsMuted] = useState(true);
+  const [isMuted, setIsMuted] = useState(false);
 
   useEffect(() => {
     const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -31,10 +31,13 @@ export function BackgroundVideo({ className }: BackgroundVideoProps) {
     const video = videoRef.current;
     if (!video || prefersReducedMotion) return;
 
-    // Muted autoplay is required on production domains (Vercel, etc.)
-    video.muted = true;
+    video.muted = false;
+
     void video.play().catch(() => {
-      // Autoplay blocked — poster remains visible until user interaction
+      // Browsers may block unmuted autoplay — fall back so video still plays
+      video.muted = true;
+      setIsMuted(true);
+      void video.play();
     });
   }, [prefersReducedMotion]);
 
@@ -42,7 +45,7 @@ export function BackgroundVideo({ className }: BackgroundVideoProps) {
     const video = videoRef.current;
     if (!video) return;
 
-    const nextMuted = !video.muted;
+    const nextMuted = !isMuted;
     video.muted = nextMuted;
     setIsMuted(nextMuted);
 
@@ -68,7 +71,7 @@ export function BackgroundVideo({ className }: BackgroundVideoProps) {
         ref={videoRef}
         className={cn("absolute inset-0 h-full w-full object-cover", className)}
         autoPlay
-        muted
+        muted={isMuted}
         loop
         playsInline
         poster={ASSETS.IMAGES.HERO_POSTER}

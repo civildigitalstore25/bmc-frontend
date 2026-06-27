@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 
+import { ASSETS } from "@/lib/constants/assets";
 import { SITE } from "@/lib/constants/content";
 
 import "./globals.css";
@@ -16,8 +17,15 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: SITE.TITLE,
+  title: {
+    default: SITE.TITLE,
+    template: `%s | ${SITE.SHORT_NAME}`,
+  },
   description: SITE.DESCRIPTION,
+  icons: {
+    icon: [{ url: ASSETS.IMAGES.FAVICON, type: "image/png" }],
+    apple: [{ url: ASSETS.IMAGES.FAVICON, type: "image/png" }],
+  },
 };
 
 export default function RootLayout({

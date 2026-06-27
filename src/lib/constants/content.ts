@@ -7,7 +7,7 @@ export const SITE = {
 } as const;
 
 export const COMING_SOON = {
-  PAGE_TITLE: "Coming Soon | BMC",
+  PAGE_TITLE: "BMC",
   HEADLINE: "Coming Soon",
   SUBTITLE:
     "We're building something great for the Businessman Development Council. Stay tuned for our launch.",

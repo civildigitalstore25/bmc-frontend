@@ -1,11 +1,8 @@
 "use client";
 
 import { BackgroundVideo } from "@/components/coming-soon/BackgroundVideo";
-import { ASSETS } from "@/lib/constants/assets";
 import { COMING_SOON } from "@/lib/constants/content";
 import { cn } from "@/lib/utils/cn";
-import Image from "next/image";
-
 interface ComingSoonHeroProps {
   siteName: string;
 }
