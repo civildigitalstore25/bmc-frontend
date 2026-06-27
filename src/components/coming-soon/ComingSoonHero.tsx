@@ -1,15 +1,19 @@
 "use client";
 
+import Image from "next/image";
+
 import { BackgroundVideo } from "@/components/coming-soon/BackgroundVideo";
+import { ASSETS } from "@/lib/constants/assets";
 import { COMING_SOON } from "@/lib/constants/content";
 import { cn } from "@/lib/utils/cn";
+
 interface ComingSoonHeroProps {
   siteName: string;
 }
 
 export function ComingSoonHero({ siteName }: ComingSoonHeroProps) {
   return (
-    <main className="relative min-h-dvh overflow-hidden">
+    <main className="relative min-h-dvh w-full overflow-x-hidden">
       <BackgroundVideo />
 
       <div
@@ -19,22 +23,20 @@ export function ComingSoonHero({ siteName }: ComingSoonHeroProps) {
         aria-hidden
       />
 
-      <div className="relative z-10 flex min-h-dvh flex-col items-center justify-center px-6 py-16 text-center">
-        <div className="flex max-w-2xl flex-col items-center gap-8">
-          
+      <div className="relative z-10 flex min-h-dvh w-full flex-col items-center justify-center px-4 py-10 sm:px-6 sm:py-16">
+        <div className="flex w-full max-w-lg flex-col items-center gap-5 sm:max-w-2xl sm:gap-8">
 
-          <div className="space-y-4 mt-90">
-            <h1 className="text-4xl font-bold uppercase tracking-[0.2em] text-secondary sm:text-5xl md:text-6xl">
+          <div className="w-full space-y-3 px-1 sm:space-y-4 sm:px-0 mt-85 text-center">
+            <h1 className="text-balance text-2xl font-bold uppercase tracking-wide text-secondary sm:text-4xl sm:tracking-[0.15em] md:text-5xl md:tracking-[0.2em] lg:text-6xl">
               {COMING_SOON.HEADLINE}
             </h1>
-            <p className="text-xl font-semibold text-primary-blue sm:text-2xl">
+            <p className="text-balance text-base font-semibold leading-snug text-primary-blue sm:text-xl md:text-2xl">
               {siteName}
             </p>
-            <p className="mx-auto max-w-lg text-base leading-relaxed text-primary-blue/90 sm:text-lg">
+            <p className="mx-auto max-w-md text-balance text-sm leading-relaxed text-primary-blue/90 sm:max-w-lg sm:text-base md:text-lg">
               {COMING_SOON.SUBTITLE}
             </p>
           </div>
-
         </div>
       </div>
     </main>

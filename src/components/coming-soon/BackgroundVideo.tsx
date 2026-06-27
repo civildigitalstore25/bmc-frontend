@@ -85,7 +85,7 @@ export function BackgroundVideo({ className }: BackgroundVideoProps) {
         variant="outline"
         size="icon"
         onClick={toggleMute}
-        className="absolute right-4 bottom-4 z-20 border-primary-foreground/30 bg-primary/60 text-primary-foreground hover:bg-primary/80"
+        className="absolute right-3 bottom-3 z-20 size-9 border-primary-foreground/30 bg-primary/60 text-primary-foreground hover:bg-primary/80 sm:right-4 sm:bottom-4"
         aria-label={isMuted ? COMING_SOON.UNMUTE_LABEL : COMING_SOON.MUTE_LABEL}
       >
         {isMuted ? <VolumeX aria-hidden /> : <Volume2 aria-hidden />}
