@@ -11,7 +11,4 @@ export const COMING_SOON = {
   HEADLINE: "Coming Soon",
   SUBTITLE:
     "We're building something great for the Businessman Development Council. Stay tuned for our launch.",
-  NOTIFY_LABEL: "Get notified when we launch",
-  NOTIFY_PLACEHOLDER: "Enter your email address",
-  NOTIFY_BUTTON: "Notify Me",
 } as const;

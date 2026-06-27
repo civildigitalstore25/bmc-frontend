@@ -37,7 +37,6 @@ export function BackgroundVideo({ className }: BackgroundVideoProps) {
     <video
       className={cn("absolute inset-0 h-full w-full object-cover", className)}
       autoPlay
-      muted
       loop
       playsInline
       poster={ASSETS.IMAGES.HERO_POSTER}

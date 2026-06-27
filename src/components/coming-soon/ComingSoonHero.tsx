@@ -57,25 +57,6 @@ export function ComingSoonHero({ siteName }: ComingSoonHeroProps) {
             </p>
           </div>
 
-          <form
-            onSubmit={handleNotify}
-            className="flex w-full max-w-md flex-col gap-3 sm:flex-row"
-            aria-label={COMING_SOON.NOTIFY_LABEL}
-          >
-            <Input
-              type="email"
-              name="email"
-              value={email}
-              onChange={(event) => setEmail(event.target.value)}
-              placeholder={COMING_SOON.NOTIFY_PLACEHOLDER}
-              required
-              className="border-primary-foreground/20 bg-primary-foreground/10 text-primary-foreground placeholder:text-primary-foreground/60"
-              aria-label={COMING_SOON.NOTIFY_PLACEHOLDER}
-            />
-            <Button type="submit" variant="secondary" size="lg" className="shrink-0">
-              {COMING_SOON.NOTIFY_BUTTON}
-            </Button>
-          </form>
         </div>
       </div>
     </main>
