@@ -1,9 +1,6 @@
 "use client";
 
-import Image from "next/image";
-
 import { BackgroundVideo } from "@/components/coming-soon/BackgroundVideo";
-import { ASSETS } from "@/lib/constants/assets";
 import { COMING_SOON } from "@/lib/constants/content";
 import { cn } from "@/lib/utils/cn";
 
@@ -26,7 +23,7 @@ export function ComingSoonHero({ siteName }: ComingSoonHeroProps) {
       <div className="relative z-10 flex min-h-dvh w-full flex-col items-center justify-center px-4 py-10 sm:px-6 sm:py-16">
         <div className="flex w-full max-w-lg flex-col items-center gap-5 sm:max-w-2xl sm:gap-8">
 
-          <div className="w-full space-y-3 px-1 sm:space-y-4 sm:px-0 mt-85 text-center">
+          <div className="w-full space-y-3 px-1 sm:space-y-4 mt-55 sm:px-0 md:mt-85 text-center">
             <h1 className="text-balance text-2xl font-bold uppercase tracking-wide text-secondary sm:text-4xl sm:tracking-[0.15em] md:text-5xl md:tracking-[0.2em] lg:text-6xl">
               {COMING_SOON.HEADLINE}
             </h1>

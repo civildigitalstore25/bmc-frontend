@@ -19,7 +19,10 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ## Hero Video
 
-Place your hero video at `public/videos/hero.mp4`. The Coming Soon page uses `public/images/hero-poster.jpg` as a fallback poster.
+- Desktop: `public/videos/hero.mp4`
+- Mobile (screens ≤ 767px): `public/videos/mobile-hero.mp4`
+
+The Coming Soon page uses `public/images/hero-poster.jpg` as a fallback poster.
 
 ## Project Structure
 

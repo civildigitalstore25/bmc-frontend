@@ -4,18 +4,27 @@ import { Volume2, VolumeX } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 import { Button } from "@/components/ui/button";
-import { ASSETS } from "@/lib/constants/assets";
+import { ASSETS, type HeroVideoSrc } from "@/lib/constants/assets";
 import { COMING_SOON } from "@/lib/constants/content";
+import { MEDIA_QUERIES } from "@/lib/constants/media";
 import { cn } from "@/lib/utils/cn";
 
 interface BackgroundVideoProps {
   className?: string;
 }
 
+function getHeroVideoSrc(isMobile: boolean): HeroVideoSrc {
+  return isMobile ? ASSETS.VIDEOS.MOBILE_HERO : ASSETS.VIDEOS.HERO;
+}
+
 export function BackgroundVideo({ className }: BackgroundVideoProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const isMutedRef = useRef(false);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
+  const [videoSrc, setVideoSrc] = useState<HeroVideoSrc>(ASSETS.VIDEOS.HERO);
+
+  isMutedRef.current = isMuted;
 
   useEffect(() => {
     const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -28,18 +37,29 @@ export function BackgroundVideo({ className }: BackgroundVideoProps) {
   }, []);
 
   useEffect(() => {
+    const mobileQuery = window.matchMedia(MEDIA_QUERIES.MOBILE);
+    const updateVideoSrc = () => setVideoSrc(getHeroVideoSrc(mobileQuery.matches));
+
+    updateVideoSrc();
+    mobileQuery.addEventListener("change", updateVideoSrc);
+
+    return () => mobileQuery.removeEventListener("change", updateVideoSrc);
+  }, []);
+
+  useEffect(() => {
     const video = videoRef.current;
     if (!video || prefersReducedMotion) return;
 
-    video.muted = false;
+    video.muted = isMutedRef.current;
 
     void video.play().catch(() => {
-      // Browsers may block unmuted autoplay — fall back so video still plays
-      video.muted = true;
-      setIsMuted(true);
-      void video.play();
+      if (!video.muted) {
+        video.muted = true;
+        setIsMuted(true);
+        void video.play();
+      }
     });
-  }, [prefersReducedMotion]);
+  }, [prefersReducedMotion, videoSrc]);
 
   const toggleMute = () => {
     const video = videoRef.current;
@@ -68,6 +88,7 @@ export function BackgroundVideo({ className }: BackgroundVideoProps) {
   return (
     <>
       <video
+        key={videoSrc}
         ref={videoRef}
         className={cn("absolute inset-0 h-full w-full object-cover", className)}
         autoPlay
@@ -77,7 +98,7 @@ export function BackgroundVideo({ className }: BackgroundVideoProps) {
         poster={ASSETS.IMAGES.HERO_POSTER}
         aria-hidden
       >
-        <source src={ASSETS.VIDEOS.HERO} type="video/mp4" />
+        <source src={videoSrc} type="video/mp4" />
       </video>
 
       <Button
