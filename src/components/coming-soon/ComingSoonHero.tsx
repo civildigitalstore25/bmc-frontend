@@ -1,10 +1,6 @@
 "use client";
 
-import { FormEvent, useState } from "react";
-
 import { BackgroundVideo } from "@/components/coming-soon/BackgroundVideo";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { ASSETS } from "@/lib/constants/assets";
 import { COMING_SOON } from "@/lib/constants/content";
 import { cn } from "@/lib/utils/cn";
@@ -15,13 +11,6 @@ interface ComingSoonHeroProps {
 }
 
 export function ComingSoonHero({ siteName }: ComingSoonHeroProps) {
-  const [email, setEmail] = useState("");
-
-  const handleNotify = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    setEmail("");
-  };
-
   return (
     <main className="relative min-h-dvh overflow-hidden">
       <BackgroundVideo />
