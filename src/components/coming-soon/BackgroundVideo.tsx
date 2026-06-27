@@ -4,7 +4,7 @@ import { Volume2, VolumeX } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 import { Button } from "@/components/ui/button";
-import { ASSETS, type HeroVideoSrc } from "@/lib/constants/assets";
+import { ASSETS } from "@/lib/constants/assets";
 import { COMING_SOON } from "@/lib/constants/content";
 import { MEDIA_QUERIES } from "@/lib/constants/media";
 import { cn } from "@/lib/utils/cn";
@@ -13,26 +13,29 @@ interface BackgroundVideoProps {
   className?: string;
 }
 
-function getHeroVideoSrc(isMobile: boolean): HeroVideoSrc {
-  return isMobile ? ASSETS.VIDEOS.MOBILE_HERO : ASSETS.VIDEOS.HERO;
-}
+function playMutedVideo(video: HTMLVideoElement) {
+  video.muted = true;
 
-function getInitialVideoSrc(): HeroVideoSrc {
-  if (typeof window === "undefined") {
-    return ASSETS.VIDEOS.HERO;
-  }
-
-  return getHeroVideoSrc(window.matchMedia(MEDIA_QUERIES.MOBILE).matches);
+  void video.play().catch(() => {
+    window.setTimeout(() => {
+      video.muted = true;
+      void video.play();
+    }, 100);
+  });
 }
 
 export function BackgroundVideo({ className }: BackgroundVideoProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const isMutedRef = useRef(true);
+  const [isMounted, setIsMounted] = useState(false);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
-  const [videoSrc, setVideoSrc] = useState<HeroVideoSrc>(getInitialVideoSrc);
 
   isMutedRef.current = isMuted;
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   useEffect(() => {
     const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -45,32 +48,32 @@ export function BackgroundVideo({ className }: BackgroundVideoProps) {
   }, []);
 
   useEffect(() => {
-    const mobileQuery = window.matchMedia(MEDIA_QUERIES.MOBILE);
-    const updateVideoSrc = () => setVideoSrc(getHeroVideoSrc(mobileQuery.matches));
+    if (!isMounted) return;
 
-    updateVideoSrc();
-    mobileQuery.addEventListener("change", updateVideoSrc);
-
-    return () => mobileQuery.removeEventListener("change", updateVideoSrc);
-  }, []);
-
-  useEffect(() => {
     const video = videoRef.current;
     if (!video || prefersReducedMotion) return;
 
-    // Muted autoplay is required on Vercel and mobile browsers (iOS Safari, Chrome)
-    video.muted = true;
-    isMutedRef.current = true;
     setIsMuted(true);
+    playMutedVideo(video);
+  }, [isMounted, prefersReducedMotion]);
 
-    void video.play().catch(() => {
-      // Retry once after a tick — helps some mobile browsers after source swap
-      window.setTimeout(() => {
-        video.muted = true;
-        void video.play();
-      }, 100);
-    });
-  }, [prefersReducedMotion, videoSrc]);
+  useEffect(() => {
+    if (!isMounted) return;
+
+    const mobileQuery = window.matchMedia(MEDIA_QUERIES.MOBILE);
+    const handleViewportChange = () => {
+      const video = videoRef.current;
+      if (!video || prefersReducedMotion) return;
+
+      video.load();
+      video.muted = isMutedRef.current;
+      void video.play().catch(() => playMutedVideo(video));
+    };
+
+    mobileQuery.addEventListener("change", handleViewportChange);
+
+    return () => mobileQuery.removeEventListener("change", handleViewportChange);
+  }, [isMounted, prefersReducedMotion]);
 
   const toggleMute = () => {
     const video = videoRef.current;
@@ -85,7 +88,7 @@ export function BackgroundVideo({ className }: BackgroundVideoProps) {
     }
   };
 
-  if (prefersReducedMotion) {
+  if (!isMounted || prefersReducedMotion) {
     return (
       // eslint-disable-next-line @next/next/no-img-element
       <img
@@ -99,7 +102,6 @@ export function BackgroundVideo({ className }: BackgroundVideoProps) {
   return (
     <>
       <video
-        key={videoSrc}
         ref={videoRef}
         className={cn("absolute inset-0 h-full w-full object-cover", className)}
         autoPlay
@@ -110,7 +112,12 @@ export function BackgroundVideo({ className }: BackgroundVideoProps) {
         poster={ASSETS.IMAGES.HERO_POSTER}
         aria-hidden
       >
-        <source src={videoSrc} type="video/mp4" />
+        <source
+          src={ASSETS.VIDEOS.MOBILE_HERO}
+          media={MEDIA_QUERIES.MOBILE}
+          type="video/mp4"
+        />
+        <source src={ASSETS.VIDEOS.HERO} type="video/mp4" />
       </video>
 
       <Button
