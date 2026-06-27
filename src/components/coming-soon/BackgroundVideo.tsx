@@ -17,12 +17,20 @@ function getHeroVideoSrc(isMobile: boolean): HeroVideoSrc {
   return isMobile ? ASSETS.VIDEOS.MOBILE_HERO : ASSETS.VIDEOS.HERO;
 }
 
+function getInitialVideoSrc(): HeroVideoSrc {
+  if (typeof window === "undefined") {
+    return ASSETS.VIDEOS.HERO;
+  }
+
+  return getHeroVideoSrc(window.matchMedia(MEDIA_QUERIES.MOBILE).matches);
+}
+
 export function BackgroundVideo({ className }: BackgroundVideoProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const isMutedRef = useRef(false);
+  const isMutedRef = useRef(true);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
-  const [isMuted, setIsMuted] = useState(false);
-  const [videoSrc, setVideoSrc] = useState<HeroVideoSrc>(ASSETS.VIDEOS.HERO);
+  const [isMuted, setIsMuted] = useState(true);
+  const [videoSrc, setVideoSrc] = useState<HeroVideoSrc>(getInitialVideoSrc);
 
   isMutedRef.current = isMuted;
 
@@ -50,14 +58,17 @@ export function BackgroundVideo({ className }: BackgroundVideoProps) {
     const video = videoRef.current;
     if (!video || prefersReducedMotion) return;
 
-    video.muted = isMutedRef.current;
+    // Muted autoplay is required on Vercel and mobile browsers (iOS Safari, Chrome)
+    video.muted = true;
+    isMutedRef.current = true;
+    setIsMuted(true);
 
     void video.play().catch(() => {
-      if (!video.muted) {
+      // Retry once after a tick — helps some mobile browsers after source swap
+      window.setTimeout(() => {
         video.muted = true;
-        setIsMuted(true);
         void video.play();
-      }
+      }, 100);
     });
   }, [prefersReducedMotion, videoSrc]);
 
@@ -95,6 +106,7 @@ export function BackgroundVideo({ className }: BackgroundVideoProps) {
         muted={isMuted}
         loop
         playsInline
+        preload="auto"
         poster={ASSETS.IMAGES.HERO_POSTER}
         aria-hidden
       >
