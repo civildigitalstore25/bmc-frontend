@@ -1,0 +1,21 @@
+---
+description: React component patterns for Server and Client Components
+globs: "**/*.tsx"
+alwaysApply: false
+---
+
+# Components
+
+- Prefer Server Components by default.
+- Use Client Components only for browser APIs, state, or event handlers.
+- Keep business logic outside UI components.
+- Prefer composition over deep nesting.
+
+```tsx
+// ❌ BAD — client component for static content
+"use client";
+export function Title() { return <h1>Hello</h1>; }
+
+// ✅ GOOD — server component unless interactivity is needed
+export function Title() { return <h1>Hello</h1>; }
+```

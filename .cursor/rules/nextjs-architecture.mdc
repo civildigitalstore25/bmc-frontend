@@ -1,0 +1,13 @@
+---
+description: Core Next.js architecture and project structure standards
+alwaysApply: true
+---
+
+# Next.js Architecture
+
+- Reuse existing components, hooks, utilities, and services (DRY).
+- Keep files focused and under 200 lines where practical.
+- Shared UI → `components/ui`, shared app UI → `components/common`, features → `components/<feature>`.
+- Hooks → `hooks/`, utilities → `lib/`, constants → `lib/constants/`, types → `types/`, server actions → `actions/`, API calls → `services/`.
+
+Before writing code, check: does similar code exist? Can an existing hook/service be extended?

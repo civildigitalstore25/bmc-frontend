@@ -1,0 +1,19 @@
+---
+description: Tailwind CSS and brand styling standards
+globs: "**/*.{tsx,css}"
+alwaysApply: false
+---
+
+# Styling
+
+- Use Tailwind CSS with design tokens from `globals.css` (`primary`, `secondary`, `brand-blue`, `brand-orange`).
+- Brand colors: blue `#1a4683`, orange `#f58432` — use CSS variables, never hardcode in components.
+- No inline styles. Use `cn()` for conditional classes.
+
+```tsx
+// ❌ BAD
+<button style={{ backgroundColor: "#1a4683" }} />
+
+// ✅ GOOD
+<Button variant="default" />
+```

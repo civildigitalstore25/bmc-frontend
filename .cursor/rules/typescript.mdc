@@ -1,0 +1,19 @@
+---
+description: TypeScript strict typing standards
+globs: "**/*.{ts,tsx}"
+alwaysApply: false
+---
+
+# TypeScript
+
+- Use strict TypeScript; avoid `any`.
+- Define shared types in `types/` `.ts` files, import into components.
+- Keep component props strongly typed.
+
+```typescript
+// ❌ BAD
+const data: any = await fetchData();
+
+// ✅ GOOD — type in types/
+import type { HealthCheckData } from "@/types";
+```

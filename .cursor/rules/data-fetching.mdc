@@ -1,0 +1,20 @@
+---
+description: Data fetching with Server Components and services
+globs: "src/{app,actions,services}/**"
+alwaysApply: false
+---
+
+# Data Fetching
+
+- Prefer Server Components for data fetching.
+- Keep API calls in `services/` using `api-client.ts`.
+- Handle loading, error, and empty states.
+- Use Server Actions when mutations are needed.
+
+```typescript
+// ✅ GOOD — service layer
+import { apiClient } from "@/services/api-client";
+import { API_ENDPOINTS } from "@/lib/constants/api-endpoints";
+
+const response = await apiClient.get(API_ENDPOINTS.HEALTH);
+```
